@@ -110,3 +110,69 @@ const checkSql = "SELECT id FROM assets WHERE asset_code = ?";
         });
     });
 });
+
+app.put("/assets/:id", (req, res) => {
+    const id = req.params.id;
+
+    const asset_code = (req.body.asset_code || "").trim();
+    const category = (req.body.category || "").trim();
+    const subcategory = (req.body.subcategory || "").trim();
+    const asset_type = (req.body.asset_type || "").trim();
+    const description = (req.body.description || "").trim();
+    const quantity = req.body.quantity;
+    const status = (req.body.status || "").trim();
+    const custodian = (req.body.custodian || "").trim();
+
+    const errorMsg = validateAsset({ asset_code, category, asset_type, description, quantity, status, custodian });
+    if (errorMsg) {
+        return res.status(400).json({ error: errorMsg });
+    }
+const checkSql = "SELECT id FROM assets WHERE asset_code = ? AND id != ?";
+    db.query(checkSql, [asset_code, id], (err, rows) => {
+        if (err) {
+            console.log("Error checking duplicate asset code:", err);
+            return res.status(500).json({ error: "Database error while checking duplicate asset code" });
+        }
+        if (rows.length > 0) {
+            return res.status(400).json({ error: "Asset Code already exists. Please use a different code." });
+        }
+
+        const updateSql = `
+            UPDATE assets
+            SET asset_code = ?, category = ?, subcategory = ?, asset_type = ?,
+                description = ?, quantity = ?, status = ?, custodian = ?
+            WHERE id = ?
+        `;
+        const values = [asset_code, category, subcategory, asset_type, description, parseInt(quantity), status, custodian, id];
+
+        db.query(updateSql, values, (err, result) => {
+            if (err) {
+                console.log("Error updating asset:", err);
+                return res.status(500).json({ error: "Database error while updating asset" });
+            }
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ error: "Asset not found" });
+            }
+            res.json({ message: "Asset updated successfully" });
+        });
+    });
+});
+app.delete("/assets/:id", (req, res) => {
+    const id = req.params.id;
+    const sql = "DELETE FROM assets WHERE id = ?";
+
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+            console.log("Error deleting asset:", err);
+            return res.status(500).json({ error: "Database error while deleting asset" });
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Asset not found" });
+        }
+        res.json({ message: "Asset deleted successfully" });
+    });
+});
+
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+});
