@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="style.css">
+
+<title>Inventory Management</title>
+
+</head>
+
+<body>
+
+
+<div class="container">
+
+
+<h1>Inventory Management System</h1>
+
+
+<div class="form">
+
+
+    <input type="text" id="assetCode" placeholder="Asset Code">
+
+
+    <select id="category">
+
+        <option>Select Category</option>
+
+        <option>Electric Equipment</option>
+
+        <option>Office Equipment</option>
+
+        <option>Computer Equipment</option>
+
+        <option>Computer Accessories</option>
+
+    </select>
+
+
+    <input type="text" id="subcategory" placeholder="Sub Category">
+
+
+    <select id="assetType">
+
+        <option>Select Asset Type</option>
+
+        <option>Asset</option>
+
+        <option>Inventory</option>
+
+    </select>
+
+
+    <input type="text" id="description" placeholder="Description">
+
+
+    <input type="number" id="quantity" placeholder="Quantity">
+
+
+    <select id="status">
+
+        <option>Select Status</option>
+
+        <option>Working Condition</option>
+
+        <option>Available & In Use</option>
+
+        <option>Under Maintenance</option>
+
+    </select>
+
+
+    <input type="text" id="custodian" placeholder="Current Custodian">
+
+
+    <!-- Hidden field: stores the id of the asset being edited. Empty means "Add" mode -->
+
+    <input type="hidden" id="editId" value="">
+
+
+    <button class="add-btn" id="addBtn">Add Asset</button>
+
+
+</div>
+
+
+<!-- Search box: added so users can search live by asset code, category, sub category, description, or custodian -->
+
+<div class="search-container">
+
+    <input type="text" id="searchBox" placeholder="Search by asset code, category, description, custodian...">
+
+</div>
+
+
+<div class="table-container">
+
+
+<table>
+
+
+<thead>
+
+
+<tr>
+
+
+<th>ID</th>
+
+<th>Asset Code</th>
+
+<th>Category</th>
+
+<th>Sub Category</th>
+
+<th>Type</th>
+
+<th>Description</th>
+
+<th>Quantity</th>
+
+<th>Status</th>
+
+<th>Custodian</th>
+
+<th>Actions</th>
+
+
+</tr>
+
+
+</thead>
+
+
+<!-- id added so JavaScript can insert rows here. Hardcoded sample rows removed - data now loads from MySQL -->
+
+<tbody id="tableBody">
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+</div>
+
+
+<script src="main.js"></script>
+
+
+</body>
+
+</html>
